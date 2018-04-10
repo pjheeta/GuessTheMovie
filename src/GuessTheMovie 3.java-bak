@@ -1,0 +1,184 @@
+import java.io.File;
+import java.io.*;
+import java.util.Scanner;
+
+
+public class GuessTheMovie {
+
+	private int numbGuess = 10;
+	private String guessChar;
+	private int randomNumber;
+	private String movieTitle;
+	//private String movieName;
+	
+	
+	
+	//Constructor
+	public GuessTheMovie() {		
+	}
+
+	
+	
+	
+	/*
+	 ***  readFile() Method ***
+	 *  This method will read the file movies.txt and store that information into an array
+	 *  Once the size of the array is known, a random movie title will be picked and returned back 
+	 *  to the Main method 
+	 *  2 Scanner elements are needed.   
+	 *  Scanner #1 - Count the Array Size
+	 *  Scanner #2 - Create the array 
+	 *  Once the Array size is known, a Method to generate a random number is called, passing in the array Size
+	 *  The random Number method returns a random number from 0 - (ArraySize-1) 
+	 *  A string is created containing the array entry @ random array number
+	 *  This string is passed back to the main array
+	 */
+	
+	public String readFile(){ 
+		//Declaration of Objects
+		String temp ="";
+		String movieName;
+		int randomInt;
+		
+		try {
+			File file = new File("movies.txt");
+			Scanner arrayScan = new Scanner(file);
+			Scanner scanner = new Scanner(file);
+			int arraySize = 0;
+			int movieSize=0;
+						
+			//Discover how big the file is
+			while (arrayScan.hasNextLine()) {
+				arrayScan.nextLine();
+				arraySize++;
+			}
+			arrayScan.close();
+			
+			
+			//Fill up the Array
+			String movie [] = new String [arraySize];
+			while (scanner.hasNextLine()) {
+				movie[movieSize]=scanner.nextLine();
+				movieSize++;
+			}
+			scanner.close();
+
+			randomInt = setRandom(arraySize);
+			movieName = movie[randomInt];
+			return movieName;
+		}
+		
+		catch (FileNotFoundException exception){
+			System.out.print("That file doesn't exist!!");
+		}
+	return temp;
+	}
+	
+	
+/*
+ * This method is the main Hangman methof	
+ */
+	public String hangman(GuessTheMovie game, String guessString, int i) {
+		
+		System.out.println("You are guessing: "+ guessString +": Number of Points remaining[" + i+ "]");
+		System.out.print("Please guess a letter");
+		return game.getCharacter();
+	}
+	
+	
+	/*
+	 *This Method grabs the user input
+	 * A Try and Catch is not needed since we are dealing directly with a String
+	 * scanner.useDelimiter is used to take the first character from the scanner function   
+	 */	
+	private String getCharacter() {		
+
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("");
+		String scanInput = scanner.next();;
+		return scanInput;
+	}
+		
+	
+	
+	/*
+	 * This method generates a random number.
+	 * An integer is passed in and the random number is returned.
+	 */
+	public int setRandom(int randomNumber) {
+		
+		this.randomNumber = (int)(Math.random()*randomNumber);
+		return this.randomNumber;
+	}
+	
+	
+	
+	
+	
+	
+	/*
+	 * Main Method
+	 */
+	
+	public static void main(String[] args) {
+		GuessTheMovie game = new GuessTheMovie();
+		game.movieTitle = game.readFile();
+		System.out.println(game.movieTitle);
+		System.out.println ("\n\nGuess the movie!");
+		System.out.println("You begin with "+ game.numbGuess+" points.  A point is lost everytime an incorrect letter is chosen");
+		System.out.println("The game is over if the correct movie is guessed, or if all 10 points are lost.\n\n\n");
+		
+		
+		//This line replaces characters in the movie title with "_"
+		String guessString = new String(new char[game.movieTitle.length()]).replace("\0", "_");
+		String character = game.getCharacter();
+		
+		
+		/*
+		 * This part we will compare if this character is in the movie title 
+		 */
+		
+		for (int i=0;i<game.movieTitle.length();i++) {
+			if (game.movieTitle.charAt(i)==character.charAt(0)) {
+				//guessString.charAt(i).equals(character.charAt(0));
+				//game.movieTitle=game.movieTitle.replace("_", character);
+				System.out.print (guessString + ", ");
+			}
+			else {
+				System.out.print ("fail" + ", ");
+			}
+		}
+		
+		
+		//THIS WORKS,  now make it Sexy and within the program
+		String myName = "Pawan Jheeta";
+		String newName = myName.substring(0,4) + "_" + myName.substring(5);
+		System.out.print (newName);
+		
+		
+		
+		//String = new String.replace( , )
+		//String = new String((new char(7)).replace( , )
+		/*
+		
+		//Nested forloop.    Compare every letter of the Movie Title		
+		for (int i=game.numbGuess; i>0; i--) {
+			character=game.hangman(game, guessString, i);
+			char foo = character.charAt(0);
+			for (int j=0; j<game.movieTitle.length(); j++) {
+				if (game.movieTitle.charAt(j)==foo) {
+					//game.movieTitle.charAt(j)=character.charAt(0);
+					
+					
+			//	fuck = game.movieTitle.setCharAt(j,foo);
+			//		System.out.println(fuck);
+					//game.movieTitle.charAt(j)=foo;
+					//convert the place with hte appropriate letter
+				}
+			}
+			
+		}
+		*/
+		
+	}
+}

@@ -1,0 +1,157 @@
+import java.io.File;
+import java.io.*;
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+
+public class GuessTheMovie {
+
+	private int numbGuess = 10;
+	private String guessString;
+	private int randomNumber;
+	private String movieTitle;
+	//private String movieName;
+	
+	
+	
+	//Constructor
+	public GuessTheMovie() {
+		
+	}
+
+	
+	
+	
+	/*
+	 ***  readFile() Method ***
+	 *  This method will read the file movies.txt and store that information into an array
+	 *  Once the size of the array is known, a random movie title will be picked and returned back 
+	 *  to the Main method 
+	 *  2 Scanner elements are needed.   
+	 *  Scanner #1 - Count the Array Size
+	 *  Scanner #2 - Create the array 
+	 *  Once the Array size is known, a Method to generate a random number is called, passing in the array Size
+	 *  The random Number method returns a random number from 0 - (ArraySize-1) 
+	 *  A string is created containing the array entry @ random array number
+	 *  This string is passed back to the main array
+	 */
+	
+	public String readFile(){ 
+		//Declaration of Objects
+		String temp ="";
+		String movieName;
+		int randomInt;
+		
+		try {
+			File file = new File("movies.txt");
+			Scanner arrayScan = new Scanner(file);
+			Scanner scanner = new Scanner(file);
+			int arraySize = 0;
+			int movieSize=0;
+						
+			//Discover how big the file is
+			while (arrayScan.hasNextLine()) {
+				arrayScan.nextLine();
+				arraySize++;
+			}
+			arrayScan.close();
+			
+			
+			//Fill up the Array
+			String movie [] = new String [arraySize];
+			while (scanner.hasNextLine()) {
+				movie[movieSize]=scanner.nextLine();
+				movieSize++;
+			}
+			scanner.close();
+
+			randomInt = setRandom(arraySize);
+			movieName = movie[randomInt];
+			return movieName;
+		}
+		
+		catch (FileNotFoundException exception){
+			System.out.print("That file doesn't exist!!");
+		}
+	return temp;
+	}
+	
+	
+	
+	public String hangman(GuessTheMovie game, String guessString, int i) {
+		
+		System.out.println("You are guessing: "+ guessString +": Number of Points remaining[" + i+ "]");
+		System.out.print("Please guess a letter");
+		return game.getCharacter();
+	}
+	
+	
+	/*
+	 *This Method grabs the user input
+	 * A Try and Catch is not needed since we are dealing directly with a String
+	 * scanner.useDelimiter is used to take the first character from the scanner function   
+	 */	
+	private String getCharacter() {		
+
+		//
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("");
+		String scanInput = scanner.next();	
+		return scanInput;
+
+	}
+		
+	
+	
+	/*
+	 * This method generates a random number.
+	 * An integer is passed in and the random number is returned.
+	 */
+	public int setRandom(int randomNumber) {
+		
+		this.randomNumber = (int)(Math.random()*randomNumber);
+		return this.randomNumber;
+	}
+	
+	
+	
+	
+	
+	
+	/*
+	 * Main Method
+	 */
+	
+	public static void main(String[] args) {
+		String movieTitle;
+		String guessString;
+		int numbGuess = 10;
+		String guessChar;
+		
+		GuessTheMovie game = new GuessTheMovie();
+		game.movieTitle = game.readFile();
+
+		
+		System.out.println(game.movieTitle);
+		System.out.println ("\n\nGuess the movie!" );
+		System.out.println("You begin with "+ numbGuess+" points.  A point is lost everytime an incorrect letter is chosen");
+		System.out.println("The game is over if the correct movie is guessed, or if all 10 points are lost.\n\n\n");
+		
+		
+		//This line replaces characters in the movie title with "_"
+		guessString = new String(new char[game.movieTitle.length()]).replace("\0", "_");
+		
+		
+
+		for (int i=numbGuess; i>0; i--) {
+			guessChar=game.hangman(game, guessString, i);
+			
+		}
+		
+	}
+	
+	
+//char foo = temp.charAt(0);
+	
+	
+}
